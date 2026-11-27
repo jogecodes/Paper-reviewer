@@ -375,7 +375,7 @@ def build(paper):
     modeling_texts=re.split(r'\n\s*\n',(HERE/'modeling-paradigms.tex').read_text().strip())
     if len(modeling_texts)!=3:raise ValueError('Expected three proposed modeling-paradigms paragraphs')
     modeling_reasons=[
-        'Propuesta pendiente: párrafo acordado sobre objetivo de AD, posible sesgo hacia patrones conocidos y escasez de etiquetas, con transición «This concern, together with…». Ejemplos concretos: likelihood [24], separación de vecinos [25], sparsity local relativa [26], y reconstrucción y forecasting por discrepancias entre outputs y valores observados [28]. Se retiran «Several modeling families…», negative log-likelihood y la mención explícita de autoencoders [27]. Mantener «can» y «zero-day» entre comillas, sin prometer robustez universal.',
+        'Párrafo aprobado por Jorge: objetivo de AD, posible sesgo hacia patrones conocidos y escasez de etiquetas, con transición «This concern, together with…». Ejemplos concretos: likelihood [24], separación de vecinos [25], sparsity local relativa [26], y reconstrucción y forecasting por discrepancias entre outputs y valores observados [28]. Se retiran «Several modeling families…», negative log-likelihood y la mención explícita de autoencoders [27]. Mantener «can» y «zero-day» entre comillas, sin prometer robustez universal.',
         'Propuesta pendiente: condensar el contexto temporal y los modelos recurrentes y transformers, sin afirmar superioridad ni convertir una arquitectura concreta en el centro del artículo.',
         'Propuesta pendiente: retirar la descripción generalizada de encoder-decoder enmascarado; no representa todos los transformers y no es necesaria para presentar una regla de decisión sobre scores.',
         'Propuesta pendiente: distinguir ranking, selección del umbral y evaluación. Sustituir la lista de ejemplos por Xu y Boström, sin confundir uso de etiquetas durante la evaluación con uso de etiquetas durante la calibración ni afirmar pérdida de robustez inevitable.']
@@ -384,7 +384,7 @@ def build(paper):
         proposals.append(dict(id='related-modeling-'+str(number).zfill(3),blockId=block['id'],
                               originalHash=block['sourceHash'],proposedLatex=text,
                               proposedHtml='<p>'+renderer.inline(text)+'</p>' if text else '',
-                              reason=reason,status='pending',comment='',updatedAt=0))
+                              reason=reason,status='accepted' if number==1 else 'pending',comment='',updatedAt=0))
     closing_line=operational_source[:operational_source.index(closing_text)].count('\n')+1
     closing=renderer.add('paragraph',closing_text,'../paper-review/operational-paragraph.tex',closing_line,
                          '<p>'+renderer.inline(closing_text)+'</p>',
@@ -420,8 +420,6 @@ def build(paper):
                         if review_statuses.get(block['id'],block.get('reviewStatus')) in ('pending','needs_changes')
                         and review_content.get(block['id'],block['html']).strip()),
                        renderer.blocks[0]['id'])
-    # Focus the subsection currently under review.
-    initial_block=modeling_blocks[0]['id']
     data=dict(version=1,paperId='AutoCUSUM_v2',sourceHash=source_hash,sourceDirectory=str(paper),sourceFiles=manifest,
               title=renderer.inline(title),authors='Jorge Casajús-Setién · Pedro Larrañaga · Concha Bielza',
               blocks=renderer.blocks,outline=renderer.outline,
