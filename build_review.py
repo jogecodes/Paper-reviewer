@@ -319,7 +319,7 @@ def build(paper):
          'that increases when scores exceed a reference level and decreases toward zero when they fall below '
          'it, allowing small but persistent score increases to accumulate into detectable evidence '
          r'\cite{cusumpersistent}. These properties motivate three practical benefits:')]
-    # The contribution paragraph is approved; the roadmap remains pending.
+    # The introduction, including the contribution and roadmap, is approved.
     proposals=[dict(id='intro-opening-'+str(i).zfill(3),blockId=block['id'],originalHash=block['sourceHash'],
                    proposedLatex=text,proposedHtml='<p>'+renderer.inline(text)+'</p>' if text else '',
                    reason=('Introducción de CUSUM aprobada: perspectiva del proceso estocástico, vigilancia de cambios significativos y contraste con puntuaciones individuales y ruidosas. Se retira la frase sobre memoria temporal para no repetir la viñeta de consolidación de episodios y se adopta «, allowing».' if i==6 else
@@ -358,12 +358,12 @@ def build(paper):
         (9,contribution_blocks[0],'contributions.tex',
          'Párrafo de contribución aprobado por Jorge: AutoCUSUM como segunda etapa, consistente en un gráfico CUSUM equipado con calibración automática. Se mantienen los proxies de sensibilidad, las penalizaciones por falsas alarmas, la muestra finita normal y la evaluación como validación de una única contribución metodológica.'),
         (10,contribution_blocks[1],'paper-structure.tex',
-         'Propuesta pendiente: condensar el itinerario del artículo, destacar el procedimiento de calibración y mantener todas las referencias a secciones.')):
+         'Itinerario del artículo aprobado por Jorge: versión concisa, con mención del procedimiento de calibración y todas las referencias a secciones.')):
         text=(HERE/filename).read_text().strip()
         proposals.append(dict(id='intro-opening-'+str(number).zfill(3),blockId=block['id'],
                               originalHash=block['sourceHash'],proposedLatex=text,
                               proposedHtml='<p>'+renderer.inline(text)+'</p>',
-                              reason=reason,status='accepted' if number==9 else 'pending',comment='',updatedAt=0))
+                              reason=reason,status='accepted',comment='',updatedAt=0))
     modeling_position=next(i for i,block in enumerate(renderer.blocks)
                            if block['source']=='sections/2_related_work.tex' and block['kind']=='heading'
                            and 'The Modeling Paradigms for Streaming Anomaly Detection' in block['html'])
@@ -375,7 +375,7 @@ def build(paper):
     modeling_texts=re.split(r'\n\s*\n',(HERE/'modeling-paradigms.tex').read_text().strip())
     if len(modeling_texts)!=3:raise ValueError('Expected three proposed modeling-paradigms paragraphs')
     modeling_reasons=[
-        'Propuesta pendiente: resumir las familias de puntuadores, incluir reconstrucción y predicción y recuperar Darban. Evitar tratar la puntuación como necesariamente continua o afirmar que todos los detectores usan el mismo paradigma.',
+        'Propuesta pendiente: recuperar al inicio la motivación del aprendizaje sin etiquetas ante desviaciones desconocidas y ataques zero-day, sin garantizar su detección. Resumir las familias de puntuadores, incluir reconstrucción y predicción y recuperar Darban. Evitar tratar la puntuación como necesariamente continua o afirmar que todos los detectores usan el mismo paradigma.',
         'Propuesta pendiente: condensar el contexto temporal y los modelos recurrentes y transformers, sin afirmar superioridad ni convertir una arquitectura concreta en el centro del artículo.',
         'Propuesta pendiente: retirar la descripción generalizada de encoder-decoder enmascarado; no representa todos los transformers y no es necesaria para presentar una regla de decisión sobre scores.',
         'Propuesta pendiente: distinguir ranking, selección del umbral y evaluación. Sustituir la lista de ejemplos por Xu y Boström, sin confundir uso de etiquetas durante la evaluación con uso de etiquetas durante la calibración ni afirmar pérdida de robustez inevitable.']
@@ -420,7 +420,7 @@ def build(paper):
                         if review_statuses.get(block['id'],block.get('reviewStatus')) in ('pending','needs_changes')
                         and review_content.get(block['id'],block['html']).strip()),
                        renderer.blocks[0]['id'])
-    # Focus the subsection requested for review without approving the earlier roadmap.
+    # Focus the subsection currently under review.
     initial_block=modeling_blocks[0]['id']
     data=dict(version=1,paperId='AutoCUSUM_v2',sourceHash=source_hash,sourceDirectory=str(paper),sourceFiles=manifest,
               title=renderer.inline(title),authors='Jorge Casajús-Setién · Pedro Larrañaga · Concha Bielza',
