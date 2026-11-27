@@ -19,10 +19,11 @@ assert before==data['sourceFiles'], 'The reading view is out of date'
 blocks={b['id']:b for b in data['blocks']}
 assert len(blocks)==len(data['blocks'])
 assert {b['source'] for b in blocks.values() if b['source'].startswith('sections/')}=={str(p.relative_to(paper)) for p in (paper/'sections').glob('*.tex')}
-assert len(data['initialProposals'])==10
+assert len(data['initialProposals'])==14
 p=data['initialProposals'][0]
 for index,proposal in enumerate(data['initialProposals']):
-    assert proposal['status']==('accepted' if index<8 else 'pending') and proposal['originalHash']==blocks[proposal['blockId']]['sourceHash']
+    assert proposal['status']==('accepted' if index<9 else 'pending') and proposal['originalHash']==blocks[proposal['blockId']]['sourceHash']
+assert data['initialBlock']==next(proposal['blockId'] for proposal in data['initialProposals'] if proposal['id']=='related-modeling-001')
 for b in blocks.values():
     assert b['sourceHash']==hashlib.sha256(b['latex'].encode()).hexdigest()
     assert b['html'].strip()
