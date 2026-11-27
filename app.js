@@ -57,7 +57,10 @@
       return b.html;
     }
     const p=proposals.get(b.id);
-    if(b.kind==='heading')return '<h'+b.level+'>'+(p&&side==='proposed'?M.escapeHtml(plain(proposalHtml(p))):b.html)+'</h'+b.level+'>';
+    if(b.kind==='heading') {
+      const heading=p&&side==='proposed'?M.escapeHtml(plain(proposalHtml(p))):b.html;
+      return heading?'<h'+b.level+'>'+heading+'</h'+b.level+'>':'';
+    }
     if(p&&p.status!=='accepted'&&$('word-diff').checked) {
       if(b.kind==='list')return listWordHtml(b.html,proposalHtml(p),side);
       if(b.kind==='paragraph') {

@@ -94,7 +94,7 @@ def build():
                 content=differences[block['id']][0 if side=='original' else 1]
             elif proposal and side=='proposed':
                 content=proposal['proposedHtml']
-            if block['kind']=='heading':
+            if block['kind']=='heading' and content.strip():
                 tag='h'+str(block['level'])
                 if proposal and side=='proposed':
                     content=html.escape(TextContent(content).text)

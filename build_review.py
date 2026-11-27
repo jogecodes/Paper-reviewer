@@ -354,9 +354,14 @@ def build(paper):
         if block['kind']=='heading':break
         if block['kind']=='paragraph':contribution_blocks.append(block)
     if len(contribution_blocks)!=2:raise ValueError('Expected two paragraphs in Contributions and Paper Structure')
+    heading=renderer.blocks[contributions_position]
+    proposals.append(dict(id='intro-contributions-heading',blockId=heading['id'],
+                          originalHash=heading['sourceHash'],proposedLatex='',proposedHtml='',
+                          reason='Propuesta pendiente: retirar el subtítulo para integrar la presentación del método, su evaluación y el itinerario al final del apartado anterior.',
+                          status='pending',comment='',updatedAt=0))
     for number,block,filename,reason in (
         (9,contribution_blocks[0],'contributions.tex',
-         'Propuesta pendiente: centrar la novedad en la calibración automática de CUSUM con normalidad y sin tasa objetivo elegida por el usuario. Presentar como segunda contribución la evaluación entre puntuadores, datasets y reglas de decisión, con métricas por observación y de episodios. No atribuir novedad al uso de CUSUM ni anticipar resultados o ablaciones.'),
+         'Propuesta pendiente: presentar una única contribución metodológica, la calibración de AutoCUSUM, y su evaluación como validación. Enlazar con el procedimiento del párrafo anterior, sin enumerar dos contribuciones ni abrir un apartado separado. Conservar la muestra finita, la ausencia de etiquetas y la ausencia de tasa objetivo elegida por el usuario; no anticipar resultados o ablaciones.'),
         (10,contribution_blocks[1],'paper-structure.tex',
          'Propuesta pendiente: condensar el itinerario del artículo, destacar el procedimiento de calibración y mantener todas las referencias a secciones.')):
         text=(HERE/filename).read_text().strip()
@@ -394,8 +399,10 @@ def build(paper):
                  '<a href="https://doi.org/10.1109/JPROC.2021.3052449">doi: 10.1109/JPROC.2021.3052449</a>.</p>',
                  proposedOnly=True)
     review_statuses={proposal['blockId']:proposal['status'] for proposal in proposals}
+    review_content={proposal['blockId']:proposal['proposedHtml'] for proposal in proposals}
     initial_block=next((block['id'] for block in renderer.blocks
-                        if review_statuses.get(block['id'],block.get('reviewStatus')) in ('pending','needs_changes')),
+                        if review_statuses.get(block['id'],block.get('reviewStatus')) in ('pending','needs_changes')
+                        and review_content.get(block['id'],block['html']).strip()),
                        renderer.blocks[0]['id'])
     data=dict(version=1,paperId='AutoCUSUM_v2',sourceHash=source_hash,sourceDirectory=str(paper),sourceFiles=manifest,
               title=renderer.inline(title),authors='Jorge Casajús-Setién · Pedro Larrañaga · Concha Bielza',
