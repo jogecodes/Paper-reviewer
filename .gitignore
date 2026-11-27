@@ -1,0 +1,9 @@
+# Runtime files from the optional local server.
+.server.pid
+server.log
+review-state.json
+
+# Python and test caches.
+__pycache__/
+*.py[cod]
+.pytest_cache/

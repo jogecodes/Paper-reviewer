@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#111318">
+  <meta name="description" content="Comparación del manuscrito original y las propuestas de revisión de AutoCUSUM.">
+  <title>AutoCUSUM · Original y propuesta</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="review-data.js" defer></script>
+  <script src="review-model.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body data-server-no-reload>
+  <header class="controls" aria-label="Opciones de comparación">
+    <label><input type="checkbox" id="sync" checked> Sincronizar</label>
+    <label title="Rojo: palabras retiradas del original. Azul: palabras añadidas a la propuesta. Los párrafos aprobados no muestran marcas."><input type="checkbox" id="word-diff" checked> Marcar palabras</label>
+    <div class="reading-progress">
+      <progress id="scroll-progress-bar" class="scroll-progress-bar" value="0" max="100" aria-label="Progreso de lectura"></progress>
+      <output id="scroll-progress" class="scroll-progress" aria-label="Porcentaje de desplazamiento">0%</output>
+    </div>
+    <div class="review-legend" aria-label="Colores de revisión">
+      <span class="legend-approved">Aprobado</span>
+      <span class="legend-review">En revisión</span>
+      <span class="legend-unreviewed">Sin revisar</span>
+    </div>
+  </header>
+  <main class="comparison" aria-label="Comparación del manuscrito">
+    <div class="pane-label">Original</div>
+    <div class="pane-label proposed-label">Propuesta</div>
+    <section id="original-pane" class="paper-pane" aria-label="Paper original" tabindex="0"><article id="original-paper" class="paper"></article></section>
+    <section id="proposed-pane" class="paper-pane" aria-label="Paper con el cambio propuesto" tabindex="0"><article id="proposed-paper" class="paper"></article></section>
+  </main>
+  <noscript>Activa JavaScript para ver los papers.</noscript>
+</body>
+</html>

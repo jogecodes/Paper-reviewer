@@ -1,0 +1,7 @@
+\begin{itemize}
+    \item \textbf{Tolerance to transient fluctuations:} Brief score excursions that might trigger false alarms under pointwise thresholding may subside before enough evidence accumulates to raise a CUSUM alarm. This inherent filtering effect can help limit the investigation workload in operational monitoring \cite{msl_smap_data}.
+
+    \item \textbf{Sensitivity to sustained anomalies:} Subtle but persistent increases in anomaly score can accumulate to cross the decision boundary \cite{cusumseminal}, even when individual score values remain below a given pointwise threshold.
+
+    \item \textbf{Consolidation of alarm episodes:} The accumulated statistic can remain above the alarm threshold during brief score decreases, joining intermittent score excursions into a continuous alarm episode.
+\end{itemize}
