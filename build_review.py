@@ -388,13 +388,24 @@ def build(paper):
     thresholding_position=next(i for i,block in enumerate(renderer.blocks)
                                if block['source']=='sections/2_related_work.tex' and block['kind']=='heading'
                                and 'Unsupervised Thresholding for Anomaly Scores' in block['html'])
-    thresholding=next(block for block in renderer.blocks[thresholding_position+1:] if block['kind']=='paragraph')
-    thresholding_text=(HERE/'thresholding-opening.tex').read_text().strip()
-    proposals.append(dict(id='related-thresholding-001',blockId=thresholding['id'],
-                          originalHash=thresholding['sourceHash'],proposedLatex=thresholding_text,
-                          proposedHtml='<p>'+renderer.inline(thresholding_text)+'</p>',
-                          reason='Propuesta pendiente: recibir aquí la distinción entre validación etiquetada y optimización en test, vinculándola a la calibración desde normalidad. El resto del párrafo se conserva como contexto original pendiente de revisión; esta reubicación no aprueba sus afirmaciones generales sobre distribuciones o representatividad.',
-                          status='pending',comment='',updatedAt=0))
+    thresholding_blocks=[]
+    for block in renderer.blocks[thresholding_position+1:]:
+        if block['kind']=='heading':break
+        if block['kind']=='paragraph':thresholding_blocks.append(block)
+    if len(thresholding_blocks)!=3:raise ValueError('Expected three paragraphs in the thresholding subsection')
+    thresholding_drafts=[
+        ('thresholding-opening.tex',
+         'Propuesta pendiente: explicar SD/MAD/IQR y su multiplicador con Yang [39], y percentiles con Ruff [79]. Distinguir muestras sin etiquetas de muestras asumidas normales. Retirar la atribución normal-only a [39], la cita MTSAD como percentil y la generalización de supuestos gaussianos.'),
+        ('thresholding-evt.tex',
+         'Propuesta pendiente: distinguir el umbral de ajuste POT del umbral final de alarma definido por un riesgo; explicar el compromiso sesgo-varianza con Scarrott y la selección automática del umbral de ajuste con Solari, sin desacreditar esa automatización. SPOT/DSPOT actualizan el modelo y mantienen el objetivo de alarma elegido por el usuario. Evitar afirmar que el riesgo estima prevalencia de anomalías o que las tasas nominales sean garantías incondicionales.'),
+        ('thresholding-operating-point.tex',
+         'Propuesta pendiente: sintetizar lo que dejan sin fijar las familias descritas y recuperar la distinción entre requisitos operativos, heurísticas y ajuste con anomalías de validación. Evitar repetir la motivación de la introducción, afirmar inexistencia universal de alternativas o presentar toda calibración sin etiquetas como libre de supuestos.')]
+    for number,(block,(filename,reason)) in enumerate(zip(thresholding_blocks,thresholding_drafts),1):
+        text=(HERE/filename).read_text().strip()
+        proposals.append(dict(id='related-thresholding-'+str(number).zfill(3),blockId=block['id'],
+                              originalHash=block['sourceHash'],proposedLatex=text,
+                              proposedHtml='<p>'+renderer.inline(text)+'</p>',
+                              reason=reason,status='pending',comment='',updatedAt=0))
     closing_line=operational_source[:operational_source.index(closing_text)].count('\n')+1
     closing=renderer.add('paragraph',closing_text,'../paper-review/operational-paragraph.tex',closing_line,
                          '<p>'+renderer.inline(closing_text)+'</p>',
