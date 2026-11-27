@@ -356,7 +356,7 @@ def build(paper):
     if len(contribution_blocks)!=2:raise ValueError('Expected two paragraphs in Contributions and Paper Structure')
     for number,block,filename,reason in (
         (9,contribution_blocks[0],'contributions.tex',
-         'Propuesta pendiente: mantener el apartado separado y presentar una única contribución metodológica, la calibración de AutoCUSUM, con su evaluación como validación. Usar una apertura autónoma sin enumerar dos contribuciones. Conservar la muestra finita, la ausencia de etiquetas y la ausencia de tasa objetivo elegida por el usuario; no anticipar resultados o ablaciones.'),
+         'Propuesta pendiente: presentar primero AutoCUSUM como segunda etapa que convierte scores en etiquetas; explicar después la calibración automática de los dos parámetros mediante un compromiso entre proxies de sensibilidad y penalizaciones por falsas alarmas. Mantener una única contribución metodológica con evaluación como validación, la muestra finita normal y la ausencia de etiquetas y de tasa objetivo elegida por el usuario. No fijar aún una receta concreta ni anticipar resultados o ablaciones.'),
         (10,contribution_blocks[1],'paper-structure.tex',
          'Propuesta pendiente: condensar el itinerario del artículo, destacar el procedimiento de calibración y mantener todas las referencias a secciones.')):
         text=(HERE/filename).read_text().strip()
