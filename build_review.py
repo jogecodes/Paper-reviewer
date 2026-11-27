@@ -376,15 +376,25 @@ def build(paper):
     if len(modeling_texts)!=3:raise ValueError('Expected three proposed modeling-paradigms paragraphs')
     modeling_reasons=[
         'Párrafo aprobado por Jorge: objetivo de AD, posible sesgo hacia patrones conocidos y escasez de etiquetas, con transición «This concern, together with…». Ejemplos concretos: likelihood [24], separación de vecinos [25], sparsity local relativa [26], y reconstrucción y forecasting por discrepancias entre outputs y valores observados [28]. Se retiran «Several modeling families…», negative log-likelihood y la mención explícita de autoencoders [27]. Mantener «can» y «zero-day» entre comillas, sin prometer robustez universal.',
-        'Propuesta pendiente: conservar la apertura elegida sobre capacidad no lineal (Darban [28]), mencionar brevemente recurrentes y transformers y explicitar que AutoCUSUM presupone un puntuador entrenado como componente previo. La calibración opera sobre sus scores sin modificarlo ni asumir que todos los puntuadores discriminan adecuadamente. La arquitectura detallada se reserva para la descripción experimental, sin comprometer aún el número de modelos evaluados.',
+        'Propuesta pendiente: conservar la apertura sobre capacidad no lineal (Darban [28]) y explicar recurrentes mediante estado oculto y transformers mediante self-attention [28,31]. Desde la perspectiva de AutoCUSUM, el puntuador entrenado es un componente previo; la calibración opera sobre sus scores sin modificarlo. Los detalles arquitectónicos y el número de modelos se reservan para la descripción experimental.',
         'Propuesta pendiente: retirar la descripción generalizada de encoder-decoder enmascarado; no representa todos los transformers y no es necesaria para presentar una regla de decisión sobre scores.',
-        'Propuesta pendiente: recuperar explícitamente que scores discriminativos no especifican el sistema operativo de decisión. AUROC mide ranking; F1 retrospectivo sobre test puede incorporar calibración supervisada post hoc (Xu y Boström [78]). Ajustar umbrales, límites o tasas objetivo con validación etiquetada evita esa fuga de test pero sigue siendo supervisado. Mantener scores fijos al comparar decisores y separar evaluación etiquetada de calibración sin etiquetas. Usar «widely used», sin afirmar que AUROC sea la métrica más prevalente.']
+        'Propuesta pendiente: cerrar el apartado con la diferencia entre ranking (AUROC [28]) y una regla operativa, y el problema del F1 con umbral optimizado retrospectivamente en test [78]. Trasladar la discusión de validación etiquetada al siguiente subapartado y reservar la comparación con scores fijos para el protocolo experimental. No afirmar que AUROC sea la métrica más prevalente.']
     for number,(block,text,reason) in enumerate(zip(modeling_blocks,
             [modeling_texts[0],modeling_texts[1],'',modeling_texts[2]],modeling_reasons),1):
         proposals.append(dict(id='related-modeling-'+str(number).zfill(3),blockId=block['id'],
                               originalHash=block['sourceHash'],proposedLatex=text,
                               proposedHtml='<p>'+renderer.inline(text)+'</p>' if text else '',
                               reason=reason,status='accepted' if number==1 else 'pending',comment='',updatedAt=0))
+    thresholding_position=next(i for i,block in enumerate(renderer.blocks)
+                               if block['source']=='sections/2_related_work.tex' and block['kind']=='heading'
+                               and 'Unsupervised Thresholding for Anomaly Scores' in block['html'])
+    thresholding=next(block for block in renderer.blocks[thresholding_position+1:] if block['kind']=='paragraph')
+    thresholding_text=(HERE/'thresholding-opening.tex').read_text().strip()
+    proposals.append(dict(id='related-thresholding-001',blockId=thresholding['id'],
+                          originalHash=thresholding['sourceHash'],proposedLatex=thresholding_text,
+                          proposedHtml='<p>'+renderer.inline(thresholding_text)+'</p>',
+                          reason='Propuesta pendiente: recibir aquí la distinción entre validación etiquetada y optimización en test, vinculándola a la calibración desde normalidad. El resto del párrafo se conserva como contexto original pendiente de revisión; esta reubicación no aprueba sus afirmaciones generales sobre distribuciones o representatividad.',
+                          status='pending',comment='',updatedAt=0))
     closing_line=operational_source[:operational_source.index(closing_text)].count('\n')+1
     closing=renderer.add('paragraph',closing_text,'../paper-review/operational-paragraph.tex',closing_line,
                          '<p>'+renderer.inline(closing_text)+'</p>',
