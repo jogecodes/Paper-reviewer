@@ -354,14 +354,9 @@ def build(paper):
         if block['kind']=='heading':break
         if block['kind']=='paragraph':contribution_blocks.append(block)
     if len(contribution_blocks)!=2:raise ValueError('Expected two paragraphs in Contributions and Paper Structure')
-    heading=renderer.blocks[contributions_position]
-    proposals.append(dict(id='intro-contributions-heading',blockId=heading['id'],
-                          originalHash=heading['sourceHash'],proposedLatex='',proposedHtml='',
-                          reason='Propuesta pendiente: retirar el subtítulo para integrar la presentación del método, su evaluación y el itinerario al final del apartado anterior.',
-                          status='pending',comment='',updatedAt=0))
     for number,block,filename,reason in (
         (9,contribution_blocks[0],'contributions.tex',
-         'Propuesta pendiente: presentar una única contribución metodológica, la calibración de AutoCUSUM, y su evaluación como validación. Enlazar con el procedimiento del párrafo anterior, sin enumerar dos contribuciones ni abrir un apartado separado. Conservar la muestra finita, la ausencia de etiquetas y la ausencia de tasa objetivo elegida por el usuario; no anticipar resultados o ablaciones.'),
+         'Propuesta pendiente: mantener el apartado separado y presentar una única contribución metodológica, la calibración de AutoCUSUM, con su evaluación como validación. Usar una apertura autónoma sin enumerar dos contribuciones. Conservar la muestra finita, la ausencia de etiquetas y la ausencia de tasa objetivo elegida por el usuario; no anticipar resultados o ablaciones.'),
         (10,contribution_blocks[1],'paper-structure.tex',
          'Propuesta pendiente: condensar el itinerario del artículo, destacar el procedimiento de calibración y mantener todas las referencias a secciones.')):
         text=(HERE/filename).read_text().strip()
