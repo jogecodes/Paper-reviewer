@@ -22,8 +22,8 @@ assert {b['source'] for b in blocks.values() if b['source'].startswith('sections
 assert len(data['initialProposals'])==15
 p=data['initialProposals'][0]
 for index,proposal in enumerate(data['initialProposals']):
-    assert proposal['status']==('accepted' if index<11 else 'pending') and proposal['originalHash']==blocks[proposal['blockId']]['sourceHash']
-assert data['initialBlock']==next(proposal['blockId'] for proposal in data['initialProposals'] if proposal['id']=='related-modeling-002')
+    assert proposal['status']==('accepted' if index<14 else 'pending') and proposal['originalHash']==blocks[proposal['blockId']]['sourceHash']
+assert data['initialBlock']==next(proposal['blockId'] for proposal in data['initialProposals'] if proposal['id']=='related-thresholding-001')
 for b in blocks.values():
     assert b['sourceHash']==hashlib.sha256(b['latex'].encode()).hexdigest()
     assert b['html'].strip()

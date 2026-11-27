@@ -376,15 +376,15 @@ def build(paper):
     if len(modeling_texts)!=3:raise ValueError('Expected three proposed modeling-paradigms paragraphs')
     modeling_reasons=[
         'Párrafo aprobado por Jorge: objetivo de AD, posible sesgo hacia patrones conocidos y escasez de etiquetas, con transición «This concern, together with…». Ejemplos concretos: likelihood [24], separación de vecinos [25], sparsity local relativa [26], y reconstrucción y forecasting por discrepancias entre outputs y valores observados [28]. Se retiran «Several modeling families…», negative log-likelihood y la mención explícita de autoencoders [27]. Mantener «can» y «zero-day» entre comillas, sin prometer robustez universal.',
-        'Propuesta pendiente: conservar la apertura sobre capacidad no lineal (Darban [28]) y explicar recurrentes mediante estado oculto y transformers mediante self-attention [28,31]. Desde la perspectiva de AutoCUSUM, el puntuador entrenado es un componente previo; la calibración opera sobre sus scores sin modificarlo. Los detalles arquitectónicos y el número de modelos se reservan para la descripción experimental.',
-        'Propuesta pendiente: retirar la descripción generalizada de encoder-decoder enmascarado; no representa todos los transformers y no es necesaria para presentar una regla de decisión sobre scores.',
-        'Propuesta pendiente: cerrar el apartado con la diferencia entre ranking (AUROC [28]) y una regla operativa, y el problema del F1 con umbral optimizado retrospectivamente en test [78]. Trasladar la discusión de validación etiquetada al siguiente subapartado y reservar la comparación con scores fijos para el protocolo experimental. No afirmar que AUROC sea la métrica más prevalente.']
+        'Propuesta aprobada por Jorge: conservar la apertura sobre capacidad no lineal (Darban [28]) y explicar recurrentes mediante estado oculto y transformers mediante self-attention [28,31]. Desde la perspectiva de AutoCUSUM, el puntuador entrenado es un componente previo; la calibración opera sobre sus scores sin modificarlo. Los detalles arquitectónicos y el número de modelos se reservan para la descripción experimental.',
+        'Propuesta aprobada por Jorge: retirar la descripción generalizada de encoder-decoder enmascarado; no representa todos los transformers y no es necesaria para presentar una regla de decisión sobre scores.',
+        'Propuesta aprobada por Jorge: cerrar el apartado con la diferencia entre ranking (AUROC [28]) y una regla operativa, y el problema del F1 con umbral optimizado retrospectivamente en test [78]. Trasladar la discusión de validación etiquetada al siguiente subapartado y reservar la comparación con scores fijos para el protocolo experimental. No afirmar que AUROC sea la métrica más prevalente.']
     for number,(block,text,reason) in enumerate(zip(modeling_blocks,
             [modeling_texts[0],modeling_texts[1],'',modeling_texts[2]],modeling_reasons),1):
         proposals.append(dict(id='related-modeling-'+str(number).zfill(3),blockId=block['id'],
                               originalHash=block['sourceHash'],proposedLatex=text,
                               proposedHtml='<p>'+renderer.inline(text)+'</p>' if text else '',
-                              reason=reason,status='accepted' if number==1 else 'pending',comment='',updatedAt=0))
+                              reason=reason,status='accepted',comment='',updatedAt=0))
     thresholding_position=next(i for i,block in enumerate(renderer.blocks)
                                if block['source']=='sections/2_related_work.tex' and block['kind']=='heading'
                                and 'Unsupervised Thresholding for Anomaly Scores' in block['html'])
